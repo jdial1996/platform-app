@@ -1,0 +1,37 @@
+name: Build and Push Docker Image to an ECR Repository 
+
+on: 
+  push: 
+    branches: ["*"]
+
+jobs: 
+  build:
+    runs-on: ubuntu-latest 
+    steps: 
+    - name: Checkout Code 
+      uses: actions/checkout@v2
+    - name: Install Dependencies
+      run: |  
+        pip3 install flake8 
+    - name: Static Code Analysis  
+      run: |
+        echo "Running flake8 linting checks...."
+        flake8 .
+    - name: Build Docker Image
+      run: |
+        docker build -t platform-app:${{ github.sha }} ./app
+    - name: Run Trivy vulnerability scanner
+      uses: aquasecurity/trivy-action@master
+      with:
+        image-ref: 'platform-app:${{ github.sha }}'
+        format: 'table'
+        exit-code: '1'
+        ignore-unfixed: true
+        vuln-type: 'os,library'
+        severity: 'CRITICAL,HIGH'
+    - name: Push Image to ECR 
+      run: |
+        echo "Pushing Image to AWS ECR"
+
+
+

@@ -5,7 +5,7 @@ app = Flask(__name__)
 
 @app.route("/")
 def index():
-    return "Web App with Python Flask running on Kubernetes =)!"
+    return "Plaform app with Python Flask running on Kubernetes =)!"
 
 
 if __name__ == "__main__":

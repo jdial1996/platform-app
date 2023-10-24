@@ -12,14 +12,14 @@ jobs:
 
     steps: 
     - name: Checkout Code 
-      uses: actions/checkout@v2
-    # - name: Install Dependencies
-    #   run: |  
-    #     pip3 install flake8 
-    # - name: Static Code Analysis  
-    #   run: |
-    #     echo "Running flake8 linting checks...."
-    #     flake8 .
+      uses: actions/checkout@v4
+    - name: Install Dependencies
+      run: |  
+        pip3 install flake8 
+    - name: Static Code Analysis  
+      run: |
+        echo "Running flake8 linting checks...."
+        flake8 .
     - name: Build Docker Image
       run: |
         docker build -t platform-app:${{ github.sha }} ./app
@@ -49,44 +49,47 @@ jobs:
       run: |
         docker tag platform-app:${{ github.sha }} $REGISTRY/$REPOSITORY:$IMAGE_TAG
         docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
-
-    # deploy
-    - name: Setup Terraform 
-      uses: hashicorp/setup-terraform@v2
-
-    - name: Terraform init
-      run: | 
-        cd deploy && terraform init 
-    
-    - name: Terraform plan
-      run: | 
-        cd deploy && terraform plan -var image_tag=${{ github.sha }}
-
-    - name: Terraform apply 
+    - name: Trigger Deployment Pipeline
       run: |
-        cd deploy && terraform apply -var image_tag=${{ github.sha }} --auto-approve
+        curl -X POST \
+          -H "Accept: application/vnd.github.everest-preview+json" \
+          -H "Authorization: Bearer ${{ secrets.DEPLOY_PAT_TOKEN }}" \
+          --data '{"event_type": "deploy_ecs", "client_payload": {"sha": "${{ github.sha }}"}}' \
+          "https://api.github.com/repos/jdial1996/ecs-platform-app/dispatches"
 
 
-    # - name: Manual Approval
-    #   if: github.event_name == 'workflow_dispatch'
+
+    # # deploy
+    # - name: Setup Terraform 
+    #   uses: hashicorp/setup-terraform@v2
+
+    # - name: Terraform init
+    #   run: | 
+    #     cd deploy && terraform init 
+    
+    # - name: Terraform plan
+    #   run: | 
+    #     cd deploy && terraform plan -var image_tag=${{ github.sha }}
+
+    # - name: Terraform apply 
     #   run: |
-    #     # This step will pause the workflow and wait for manual approval
-    #     echo "Manual approval is required. Approve the deployment in the GitHub Actions UI."
-    #   env:
-    #     MANUAL_APPROVAL: true
+    #     cd deploy && terraform apply -var image_tag=${{ github.sha }} --auto-approve
 
-    # - name: Deploy to ECS
-    #   if: env.MANUAL_APPROVAL == 'true'
-    #   run: |
-    #     # Authenticate with AWS
-    #     aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
-    #     aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        
-    #     # Update the ECS service with the new task definition
-    #     aws ecs update-service --cluster my-cluster --service my-service --task-definition my-task-definition
-    #   env:
-    #     AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-    #     AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+    # # - name: Manual Approval
+    # #   if: github.event_name == 'workflow_dispatch'
+    # #   run: |
+    # #     # This step will pause the workflow and wait for manual approval
+    # #     echo "Manual approval is required. Approve the deployment in the GitHub Actions UI."
+    # #   env:
+    # #     MANUAL_APPROVAL: true
+
+    # - name: Checkout Deploy Repository 
+    #   uses: actions/checkout@v4
+    #   with: 
+    #     repository: jdial1996/ecs-platform-app
+    #     # ssh-key: $(echo -n "${{ secrets.ECS_DEPLOY_KEY }}" | base64 --decode)
+    #     ssh-key: ${{ secrets.RAW_ECS_DEPLOY_KEY }}
 
 
 

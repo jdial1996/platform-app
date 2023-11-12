@@ -64,32 +64,3 @@ resource "aws_iam_role_policy_attachment" "ecr_push_policy_attachment" {
   role       = aws_iam_role.github_oidc_iam_role.name
   policy_arn = aws_iam_policy.ecr_push_policy.arn
 }
-
-data "aws_iam_policy_document" "tf_policy_doc" {
-  statement {
-    effect = "Allow"
-    actions = [
-      "s3:ListBucket",
-      "s3:GetObject",
-      "s3:PutObject",
-      "iam:PassRole",
-      "logs:*",
-      "ecs:*",
-      "ec2:*",
-      "elasticloadbalancing:*"
-    ]
-    # resources = ["arn:aws:s3:::platform-app-state/*","arn:aws:s3:::platform-app-state"]
-    resources = ["*"]
-  }
-}
-
-resource "aws_iam_policy" "tf_policy" {
-  name        = "tf_policy"
-  description = "Allow Terraform Actions"
-  policy      = data.aws_iam_policy_document.tf_policy_doc.json
-}
-
-resource "aws_iam_role_policy_attachment" "tf_policy_attachment" {
-  role       = aws_iam_role.github_oidc_iam_role.name
-  policy_arn = aws_iam_policy.tf_policy.arn
-}

@@ -58,13 +58,3 @@ jobs:
           "https://api.github.com/repos/jdial1996/ecs-platform-app/dispatches"
 
 
-    # # - name: Manual Approval
-    # #   if: github.event_name == 'workflow_dispatch'
-    # #   run: |
-    # #     # This step will pause the workflow and wait for manual approval
-    # #     echo "Manual approval is required. Approve the deployment in the GitHub Actions UI."
-    # #   env:
-    # #     MANUAL_APPROVAL: true
-
-
-

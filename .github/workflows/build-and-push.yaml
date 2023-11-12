@@ -23,15 +23,15 @@ jobs:
     - name: Build Docker Image
       run: |
         docker build -t platform-app:${{ github.sha }} ./app
-    # - name: Run Trivy vulnerability scanner
-    #   uses: aquasecurity/trivy-action@master
-    #   with:
-    #     image-ref: 'platform-app:${{ github.sha }}'
-    #     format: 'table'
-    #     exit-code: '1'
-    #     ignore-unfixed: true
-    #     vuln-type: 'os,library'
-    #     severity: 'CRITICAL,HIGH'
+    - name: Run Trivy vulnerability scanner
+      uses: aquasecurity/trivy-action@master
+      with:
+        image-ref: 'platform-app:${{ github.sha }}'
+        format: 'table'
+        exit-code: '1'
+        ignore-unfixed: true
+        vuln-type: 'os,library'
+        severity: 'CRITICAL,HIGH'
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v4
       with:
@@ -58,24 +58,6 @@ jobs:
           "https://api.github.com/repos/jdial1996/ecs-platform-app/dispatches"
 
 
-
-    # # deploy
-    # - name: Setup Terraform 
-    #   uses: hashicorp/setup-terraform@v2
-
-    # - name: Terraform init
-    #   run: | 
-    #     cd deploy && terraform init 
-    
-    # - name: Terraform plan
-    #   run: | 
-    #     cd deploy && terraform plan -var image_tag=${{ github.sha }}
-
-    # - name: Terraform apply 
-    #   run: |
-    #     cd deploy && terraform apply -var image_tag=${{ github.sha }} --auto-approve
-
-
     # # - name: Manual Approval
     # #   if: github.event_name == 'workflow_dispatch'
     # #   run: |
@@ -83,14 +65,6 @@ jobs:
     # #     echo "Manual approval is required. Approve the deployment in the GitHub Actions UI."
     # #   env:
     # #     MANUAL_APPROVAL: true
-
-    # - name: Checkout Deploy Repository 
-    #   uses: actions/checkout@v4
-    #   with: 
-    #     repository: jdial1996/ecs-platform-app
-    #     # ssh-key: $(echo -n "${{ secrets.ECS_DEPLOY_KEY }}" | base64 --decode)
-    #     ssh-key: ${{ secrets.RAW_ECS_DEPLOY_KEY }}
-
 
 
 

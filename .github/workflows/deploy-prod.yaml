@@ -1,0 +1,25 @@
+name: Deploy Prod
+
+on: 
+  push:
+    branches: 
+      - main
+
+jobs: 
+  build:
+    runs-on: ubuntu-latest 
+  # Have to set to enable OIDC
+    permissions:
+      id-token: write 
+      contents: read 
+
+    steps: 
+    - name: Trigger Deployment Pipeline
+      run: |
+        curl -X POST \
+          -H "Accept: application/vnd.github.everest-preview+json" \
+          -H "Authorization: Bearer ${{ secrets.DEPLOY_PAT_TOKEN }}" \
+          --data '{"event_type": "deploy_ecs", "client_payload": {"environment":"prod","sha": "${{ github.sha }}"}}' \
+          "https://api.github.com/repos/jdial1996/ecs-platform-app/dispatches"
+
+

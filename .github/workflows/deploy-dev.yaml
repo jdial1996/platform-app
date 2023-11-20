@@ -1,6 +1,10 @@
-name: Build and Push Docker Image to an ECR Repository 
+name: Deploy Development
 
-on: push 
+on: 
+  push:
+    branches-ignore: 
+      - main
+      - preprod
 
 jobs: 
   build:
@@ -48,13 +52,14 @@ jobs:
         IMAGE_TAG: ${{ github.sha }}
       run: |
         docker tag platform-app:${{ github.sha }} $REGISTRY/$REPOSITORY:$IMAGE_TAG
-        docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
+        docker tag platform-app:${{ github.sha }} $REGISTRY/$REPOSITORY:latest
+        docker push $REGISTRY/$REPOSITORY --all-tags
     - name: Trigger Deployment Pipeline
       run: |
         curl -X POST \
           -H "Accept: application/vnd.github.everest-preview+json" \
           -H "Authorization: Bearer ${{ secrets.DEPLOY_PAT_TOKEN }}" \
-          --data '{"event_type": "deploy_ecs", "client_payload": {"sha": "${{ github.sha }}"}}' \
+          --data '{"event_type": "deploy_ecs", "client_payload": {"environment":"dev","sha": "${{ github.sha }}"}}' \
           "https://api.github.com/repos/jdial1996/ecs-platform-app/dispatches"
 
 

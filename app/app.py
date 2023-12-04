@@ -1,5 +1,7 @@
 from flask import Flask, Response
 import logging
+from dotenv import load_dotenv
+import os
 
 app = Flask(__name__)
 
@@ -10,6 +12,12 @@ logging.basicConfig(level=logging.INFO, format=log_format)
 
 # Create a logger instance
 logger = logging.getLogger(__name__)
+
+load_dotenv()
+
+message = os.getenv("MESSAGE")
+
+print(message)
 
 
 @app.route("/")

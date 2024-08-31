@@ -21,7 +21,8 @@ jobs:
       - name: Black Check (Linting)
         continue-on-error: true
         run: |
-          black --check app
+          black --check --diff app
+
       - name: Flake8 Check (Linting)
         run: |
           flake8 app

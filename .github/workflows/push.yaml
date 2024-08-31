@@ -15,6 +15,7 @@ jobs:
         run: |
           black --version
       - name: Flake8 Check (Linting)
+        run: |
           flake8 --version
       - name: Docker Build
         run: |

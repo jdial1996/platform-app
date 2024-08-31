@@ -20,10 +20,10 @@ jobs:
           pip3 install black flake8
       - name: Black Check (Linting)
         run: |
-          black --version
+          black --check app
       - name: Flake8 Check (Linting)
         run: |
-          flake8 --version
+          flake8 app
       - name: Docker Build
         run: |
          docker build -t platform-app ./app

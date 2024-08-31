@@ -26,6 +26,10 @@ jobs:
       - name: Flake8 Check (Linting)
         run: |
           flake8 --max-line-length=100 app 
+      - name: pwd
+        run : | 
+          pwd 
+          ls
       - name: Snyk Scan (SAST)
         uses: snyk/actions/python@master
         env:

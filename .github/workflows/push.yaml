@@ -21,5 +21,7 @@ jobs:
         run: |
          docker build -t platform-app ./app
       - name: Docker Image Scan 
+        run: |
+          echo "Scanning Image"
 
   

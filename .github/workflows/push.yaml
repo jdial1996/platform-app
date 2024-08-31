@@ -10,9 +10,15 @@ jobs:
 
     steps: 
       - name: Checkout Code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v
+      - name: Black Check (Linting)
+        run: |
+          black --version
+      - name: Flake8 Check (Linting)
+          flake8 --version
       - name: Docker Build
-        run: | 
+        run: |
          docker build -t platform-app ./app
+      - name: Docker Image Scan 
 
   

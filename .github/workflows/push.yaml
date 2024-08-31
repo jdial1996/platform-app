@@ -37,6 +37,11 @@ jobs:
           snyk code test . 
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+      - name: Snyk Scan (SCA)
+        run: |
+          snyk test --file=requirements.txt --command=python3
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
       - name: Docker Build
         run: |
          docker build -t platform-app .

@@ -46,9 +46,6 @@ jobs:
       - name: Docker Build
         run: |
          docker build -t platform-app .
-      - name: Docker Image Scan 
-        run: |
-          echo "Scanning Image"
       - name: Docker Images
         run: | 
           docker images

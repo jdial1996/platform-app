@@ -4,6 +4,9 @@ on:
   push
 
 jobs: 
+  defaults:
+    run: 
+      working-directory: ./app
   build:
     name: Build Docker Image
     runs-on: ubuntu-latest
@@ -25,9 +28,8 @@ jobs:
 
       - name: Flake8 Check (Linting)
         run: |
-          flake8 --max-line-length=100 app 
+          flake8 --max-line-length=100 app    
       - name: Snyk Scan (SAST)
-        working-directory: ./app
         uses: snyk/actions/python@master
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}

@@ -32,6 +32,11 @@ jobs:
           flake8 --max-line-length=100 .
       - name: Setup Snyk 
         uses: snyk/actions/setup@master
+      - name: Snyk Scan (SAST)
+        run: |
+          snyk code test . 
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
       - name: Docker Build
         run: |
          docker build -t platform-app .

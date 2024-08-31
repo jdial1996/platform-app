@@ -6,14 +6,15 @@ logging.basicConfig(level=logging.INFO)
 app = Flask(__name__)
 
 
-REQUEST_COUNTER = Counter('http_requests_total', 'Total number of HTTP requests')
-REQUEST_LATENCY = Summary('request_latency_seconds', 'Time spent processing request')
+REQUEST_COUNTER = Counter("http_requests_total", "Total number of HTTP requests")
+REQUEST_LATENCY = Summary("request_latency_seconds", "Time spent processing request")
+
 
 @app.route("/")
 @REQUEST_LATENCY.time()
 def index():
 
-    client_ip = request.headers.get('X-Forwarded-For', request.remote_addr)
+    client_ip = request.headers.get("X-Forwarded-For", request.remote_addr)
 
     app.logger.info(f"Received request from {client_ip} for {request.path}")
 

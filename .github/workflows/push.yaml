@@ -1,0 +1,62 @@
+name : Push Workflow 
+
+on: 
+  push
+
+jobs: 
+  build:
+    defaults:
+      run: 
+        working-directory: ./app
+    
+    name: Build Docker Image
+    runs-on: ubuntu-latest
+
+    steps: 
+      - name: Checkout Code
+        uses: actions/checkout@v4
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'  
+      - name: Install Linting Dependencies
+        run: 
+          pip3 install black flake8
+      - name: Black Check (Linting)
+        continue-on-error: true
+        run: |
+          black --check --diff --line-length=100 .
+
+      - name: Flake8 Check (Linting)
+        run: |
+          flake8 --max-line-length=100 .
+      - name: Setup Snyk 
+        uses: snyk/actions/setup@master
+      - name: Snyk Scan (SAST)
+        run: |
+          snyk code test . 
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+      - name: Snyk Scan (SCA)
+        run: |
+          pip3 install -r requirements.txt
+          snyk test --file=requirements.txt --command=python3
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+      - name: Docker Build
+        run: |
+         docker build -t platform-app .
+      - name: Docker Image Scan 
+        run: |
+          echo "Scanning Image"
+      - name: Docker Images
+        run: | 
+          docker images
+      - name: Snyk Docker Image Vulnerability Scan
+        uses: snyk/actions/docker@master
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          image: platform-app
+
+  

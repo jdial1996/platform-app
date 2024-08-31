@@ -49,5 +49,14 @@ jobs:
       - name: Docker Image Scan 
         run: |
           echo "Scanning Image"
+      - name: Docker Images
+        run: | 
+          docker images
+      # - name: Run Snyk to check Docker image for vulnerabilities
+      #   uses: snyk/actions/docker@master
+      #   env:
+      #     SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+      #   with:
+      #     image: your/image-to-test
 
   

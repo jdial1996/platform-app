@@ -11,5 +11,8 @@ jobs:
     steps: 
       - name: Checkout Code
         uses: actions/checkout@v4
+      - name: Docker Build
+        run: | 
+         docker --version
 
   

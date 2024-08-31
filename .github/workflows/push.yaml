@@ -39,6 +39,7 @@ jobs:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
       - name: Snyk Scan (SCA)
         run: |
+          pip3 install -r requirements.txt
           snyk test --file=requirements.txt --command=python3
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}

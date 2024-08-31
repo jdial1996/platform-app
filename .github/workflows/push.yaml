@@ -4,10 +4,11 @@ on:
   push
 
 jobs: 
-  defaults:
-    run: 
-      working-directory: ./app
   build:
+    defaults:
+      run: 
+        working-directory: ./app
+    
     name: Build Docker Image
     runs-on: ubuntu-latest
 

@@ -25,18 +25,18 @@ jobs:
       - name: Black Check (Linting)
         continue-on-error: true
         run: |
-          black --check --diff --line-length=100 app
+          black --check --diff --line-length=100 .
 
       - name: Flake8 Check (Linting)
         run: |
-          flake8 --max-line-length=100 app    
+          flake8 --max-line-length=100 .
       - name: Snyk Scan (SAST)
         uses: snyk/actions/python@master
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
       - name: Docker Build
         run: |
-         docker build -t platform-app ./app
+         docker build -t platform-app .
       - name: Docker Image Scan 
         run: |
           echo "Scanning Image"

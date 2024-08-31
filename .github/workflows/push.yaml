@@ -1,0 +1,14 @@
+name : Push Workflow 
+
+on: 
+  push
+
+jobs: 
+  build:
+    name: Build Docker Image
+
+    steps: 
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+  

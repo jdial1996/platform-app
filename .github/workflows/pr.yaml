@@ -2,10 +2,11 @@ name : PR Workflow
 
 on: 
   push: 
-    - main
+    branches:
+      - main
   pull_request:
     branches:
-    - main
+      - main
 
 jobs: 
   build:

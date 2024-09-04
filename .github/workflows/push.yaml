@@ -1,7 +1,9 @@
 name : Push Workflow 
 
 on: 
-  push
+  push:
+    branches-ignore: 
+    - main
 
 jobs: 
   build:

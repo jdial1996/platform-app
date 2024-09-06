@@ -28,7 +28,7 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Build Docker Image
-        runs: 
+        run: 
           docker build -t platform-app:latest .
       - name: Docker Push (DockerHub)
         run: | 

@@ -1,5 +1,5 @@
 {
-  "branches": ["add-semantic-versioning-to-ci"],
+  "branches": ["main"],
   "plugins": [
     "@semantic-release/commit-analyzer",
     "@semantic-release/release-notes-generator",

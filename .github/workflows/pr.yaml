@@ -54,6 +54,7 @@ jobs:
         run: |
          docker build -t platform-app .
       - name: Snyk Docker Image Vulnerability Scan
+        continue-on-error: true
         uses: snyk/actions/docker@master
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}

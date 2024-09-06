@@ -34,10 +34,14 @@ jobs:
         continue-on-error: true
         run: |
           black --check --diff --line-length=100 .
-
       - name: Flake8 Check (Linting)
         run: |
           flake8 --max-line-length=100 .
+      # - name: Setup NodeJS
+      #   uses: actions/setup-node@v4
+      #   with:
+      #     python-version: 20
+      # - name: Install Semantic-Release
       - name: Setup Snyk 
         uses: snyk/actions/setup@master
       - name: Snyk Scan (SAST)
@@ -65,7 +69,7 @@ jobs:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
           image: platform-app
-      - name: Docker Push 
-        run: | 
-          docker tag platform-app:latest jdial1996/platform-app:${{ github.sha }}
-          docker push jdial1996/platform-app:${{ github.sha }}
+      # - name: Docker Push 
+      #   run: | 
+      #     docker tag platform-app:latest jdial1996/platform-app:${{ github.sha }}
+      #     docker push jdial1996/platform-app:${{ github.sha }}

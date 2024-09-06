@@ -37,6 +37,7 @@ jobs:
       - name: Flake8 Check (Linting)
         run: |
           flake8 --max-line-length=100 .
+      - name: Setup Snyk 
         uses: snyk/actions/setup@master
       - name: Snyk Scan (SAST)
         run: |

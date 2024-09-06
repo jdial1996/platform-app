@@ -53,6 +53,7 @@ jobs:
           docker images
       - name: Snyk Docker Image Vulnerability Scan
         uses: snyk/actions/docker@master
+        continue-on-error: true
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:

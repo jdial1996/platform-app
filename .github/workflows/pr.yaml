@@ -1,4 +1,4 @@
-name : PR Closed Workflow 
+name : Merge Workflow
 
 on: 
   push: 

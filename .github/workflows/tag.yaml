@@ -1,0 +1,37 @@
+name: Docker Push on Tag
+
+on: 
+  push: 
+    tags: 
+    - 'v[0-9]+.[0-9]+.[0-9]+'
+
+jobs: 
+  build and push:
+    runs-on: ubuntu-latest
+    defaults:
+      run: 
+        working-directory: ./app
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+      - name: Get Latest Tag.
+        run: |
+          echo "RELEASE_VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Build Docker Image
+        runs: 
+          docker build -t platform-app:latest .
+      - name: Docker Push (DockerHub)
+        run: | 
+          docker tag platform-app:latest jdial1996/platform-app:latest
+          docker push jdial1996/platform-app:latest
+          docker tag platform-app:latest jdial1996/platform-app:$RELEASE_VERSION
+          docker push jdial1996/platform-app:$RELEASE_VERSION
+              
+
+
+

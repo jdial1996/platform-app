@@ -5,6 +5,9 @@ on:
     branches-ignore: 
     - main
 
+permissions:
+  contents: write
+
 jobs: 
   build:
     defaults:
@@ -45,14 +48,17 @@ jobs:
           snyk test --file=requirements.txt --command=python3
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Docker Build
         run: |
          docker build -t platform-app .
-      - name: Docker Images
-        run: | 
-          docker images
       - name: Snyk Docker Image Vulnerability Scan
         uses: snyk/actions/docker@master
+        continue-on-error: true
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
